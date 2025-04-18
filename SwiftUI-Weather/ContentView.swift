@@ -8,33 +8,51 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    
+    
+    
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [.blue, .white,]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(.all)
+            BackgroundView(topColor: .blue, bottomColor: Color("lightBlue"))
+            
             VStack {
-                Text("Nashik, Maharashtra")
-                    .font(.system(size: 32, weight: .medium, design: .default))
-                    .foregroundColor(.white)
-                    .padding()
                 
-                VStack(spacing: 8) {
-                    Image(systemName: "cloud.sun.fill")
-                        .renderingMode(.original)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 180, height: 180)
-                    
-                    Text("76°C")
-                        .font(.system(size: 70, weight: .medium))
-                        .foregroundColor(.white)
+                CityTextView(cityName: "Nashik, Maharashtra")
+
+                MainWeatherStatusView(imageName: "cloud.sun.fill", temperature: 75)
+
+                HStack(spacing: 25) {
+
+                    WeatherDayView(
+                        day: "Sun", image: "cloud.sun.fill", temperature: 25)
+
+                    WeatherDayView(
+                        day: "Mon", image: "wind.snow",
+                        temperature: 50)
+
+                    WeatherDayView(
+                        day: "Tue", image: "cloud.sun.rain.fill", temperature: 40)
+
+                    WeatherDayView(
+                        day: "Wed", image: "cloud.rain.fill", temperature: 33)
+
+                    WeatherDayView(
+                        day: "Thu", image: "tornado", temperature: 66)
+
                 }
+
                 Spacer()
-             
                 
-                
-        
-                
+                Button {
+                    print("tapped")
+                } label: {
+                   
+                    WeatherButton(title: "Change Day Time",
+                                  textColor: Color.blue, backgroundColor: Color.white)
+                }
+
+                Spacer()
             }
         }
     }
@@ -42,4 +60,77 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+}
+
+struct WeatherDayView: View {
+
+    var day: String
+    var image: String
+    var temperature: Int
+
+    var body: some View {
+        VStack {
+            Text(day)
+                .foregroundColor(.white)
+
+            Image(systemName: image)
+                .renderingMode(.original)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 40, height: 40)
+
+            Text("\(temperature)°")
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(.white)
+
+        }
+    }
+}
+
+struct BackgroundView: View {
+    
+    var topColor: Color
+    var bottomColor: Color
+    
+    var body: some View {
+        
+        LinearGradient(
+            gradient: Gradient(colors: [topColor, bottomColor]),
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+        .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct CityTextView: View {
+    
+    var cityName: String
+    
+    var body: some View {
+        Text(cityName)
+            .font(.system(size: 32, weight: .medium, design: .default))
+            .foregroundColor(.white)
+            .padding()
+    }
+}
+
+struct MainWeatherStatusView: View {
+    
+    var imageName: String
+    var temperature: Int
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: imageName)
+                .renderingMode(.original)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 180, height: 180)
+            
+            Text("\(temperature)°C")
+                .font(.system(size: 70, weight: .medium))
+                .foregroundColor(.white)
+        }
+        .padding(40)
+    }
 }
